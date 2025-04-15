@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { configDotenv } from "dotenv";
-import UserUpdate from "../updateStateComponents/UserUpdate";
+import UserUpdate from "../../redux/stateUpdaterComponents/UserUpdate";
 import { UserType } from "@/types/user.type";
 
 configDotenv();
