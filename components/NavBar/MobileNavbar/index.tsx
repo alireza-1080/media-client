@@ -84,7 +84,7 @@ const MobileNavbar = () => {
             ) : (
               <>
                 <SignInButton mode="modal">
-                  <Button variant="default" className="w-4/5 mx-auto">
+                  <Button variant="default" className="mx-auto w-4/5">
                     Sign In
                   </Button>
                 </SignInButton>

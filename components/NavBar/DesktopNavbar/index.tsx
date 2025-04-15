@@ -1,5 +1,7 @@
+import SyncUserAction from "@/components/actionComponents/SyncUser";
 import ThemeToggler from "@/components/theme-toggler";
 import { Button } from "@/components/ui/button";
+import UserReset from "@/components/updateStateComponents/UserReset";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { BellIcon, HomeIcon, UserIcon } from "lucide-react";
@@ -22,6 +24,7 @@ const DesktopNavbar = async () => {
 
       {user ? (
         <>
+          <SyncUserAction />
           <Button variant={"ghost"} className="flex items-center gap-2" asChild>
             <Link href={"/"}>
               <BellIcon className="size-4" />
@@ -40,9 +43,14 @@ const DesktopNavbar = async () => {
           <UserButton />
         </>
       ) : (
-        <SignInButton mode="modal">
-          <Button variant={"default"}>Sign In</Button>
-        </SignInButton>
+        <>
+          <UserReset />
+          <SignInButton mode="modal">
+            <Button variant={"default"} className="cursor-pointer">
+              Sign In
+            </Button>
+          </SignInButton>
+        </>
       )}
     </div>
   );
