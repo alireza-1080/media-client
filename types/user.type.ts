@@ -1,4 +1,4 @@
-type UserType = {
+type UserPlusStatsType = {
   id: string;
   email: string;
   clerkId: string;
@@ -10,6 +10,11 @@ type UserType = {
   website: string | null;
   createdAt: string;
   updatedAt: string;
+  _count: {
+    followers: number;
+    followings: number;
+    posts: number;
+  };
 };
 
-export type { UserType };
+export type { UserPlusStatsType };
