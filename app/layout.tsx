@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/NavBar";
 import Sidebar from "@/components/Sidebar";
+import ReduxProvider from "@/redux/ReduxProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,26 +33,28 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="min-h-screen">
-              <NavBar />
-              <main className="py-8">
-                <div className="mx-auto max-w-7xl px-4">
-                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-                    <div className="hidden lg:col-span-3 lg:block">
-                      <Sidebar />
+          <ReduxProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <div className="min-h-screen">
+                <NavBar />
+                <main className="py-8">
+                  <div className="mx-auto max-w-7xl px-4">
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                      <div className="hidden lg:col-span-3 lg:block">
+                        <Sidebar />
+                      </div>
+                      <div className="lg:col-span-9">{children}</div>
                     </div>
-                    <div className="lg:col-span-9">{children}</div>
                   </div>
-                </div>
-              </main>
-            </div>
-          </ThemeProvider>
+                </main>
+              </div>
+            </ThemeProvider>
+          </ReduxProvider>
         </body>
       </html>
     </ClerkProvider>

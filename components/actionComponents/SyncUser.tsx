@@ -1,5 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { configDotenv } from "dotenv";
+import { UserType } from "@/types/user.type";
+import SetUserState from "@/redux/setStateComponents/SetUserState";
 
 configDotenv();
 
@@ -21,13 +23,19 @@ const SyncUserAction = async () => {
 
   const serverUrl = process.env.SERVER_URL as string;
 
-  await fetch(`${serverUrl}/user`, {
+  const userResponse = await fetch(`${serverUrl}/user/update`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ clerkId, username, email, name, image }),
   });
+
+  const userData: { user: UserType } = await userResponse.json();
+
+  const { user } = userData;
+
+  return <SetUserState user={user} />;
 };
 
 export default SyncUserAction;

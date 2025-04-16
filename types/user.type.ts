@@ -1,4 +1,4 @@
-type UserPlusStatsType = {
+type UserType = {
   id: string;
   email: string;
   clerkId: string;
@@ -17,4 +17,4 @@ type UserPlusStatsType = {
   };
 };
 
-export type { UserPlusStatsType };
+export type { UserType };

@@ -1,39 +1,18 @@
+'use client'
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { LinkIcon, MapPinIcon } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
-import { currentUser } from "@clerk/nextjs/server";
-import { UserPlusStatsType } from "@/types/user.type";
 import { configDotenv } from "dotenv";
+import { useAppSelector } from "@/redux/hooks";
 
 configDotenv();
 
-const AuthenticatedSidebar = async () => {
-  const clerkUser = await currentUser();
-  const serverUrl = process.env.SERVER_URL;
-
-  if (!clerkUser) {
-    return;
-  }
-
-  const { id: clerkId } = clerkUser;
-
-  const userResponse = await fetch(
-    `${serverUrl}/user/get-user-plus-statistics-by-clerk-id`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ clerkId }),
-    },
-  );
-
-  const data: { user: UserPlusStatsType } = await userResponse.json();
-
-  const { user } = data;
+const AuthenticatedSidebar = () => {
+  
+  const user = useAppSelector(state => state.user.value)
 
   return (
     <div className="sticky top-20">

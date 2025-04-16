@@ -1,12 +1,15 @@
-import { currentUser } from "@clerk/nextjs/server";
-import React from "react";
+"use client";
+
 import UnAuthenticatedSidebar from "./UnAuthenticatedSidebar";
 import AuthenticatedSidebar from "./AuthenticatedSidebar";
+import { useAppSelector } from "@/redux/hooks";
 
-const Sidebar = async () => {
-  const isUserLoggedIn = Boolean(await currentUser());
+const Sidebar = () => {
+  const user = useAppSelector((state) => state.user.value);
 
-  if (!isUserLoggedIn) {
+  const { id } = user;
+
+  if (!id) {
     return <UnAuthenticatedSidebar />;
   }
 
