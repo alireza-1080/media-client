@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/NavBar";
 import Sidebar from "@/components/Sidebar";
 import ReduxProvider from "@/redux/ReduxProvider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
+              <Toaster />
               <div className="min-h-screen">
                 <NavBar />
                 <main className="py-8">
