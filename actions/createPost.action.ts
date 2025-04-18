@@ -6,7 +6,6 @@ configDotenv();
 const serverUrl = process.env.SERVER_URL;
 
 const createPost = async (authorId: string, content: string, image: string) => {
-    console.log(`${serverUrl}/post/create`)
   try {
     const res = await fetch(`${serverUrl}/post/create`, {
       method: "POST",
@@ -17,7 +16,7 @@ const createPost = async (authorId: string, content: string, image: string) => {
     });
 
     if (res.ok) {
-        revalidatePath("/")
+      revalidatePath("/");
       return { success: true };
     }
 

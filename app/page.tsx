@@ -1,4 +1,5 @@
 import CreatePost from "@/components/CreatePost";
+import WhoToFollow from "@/components/WhoToFollow";
 import { currentUser } from "@clerk/nextjs/server";
 import React from "react";
 
@@ -10,7 +11,7 @@ const HomePage = async () => {
       <div className="lg:col-span-6">{clerkUser ? <CreatePost /> : null}</div>
 
       <div className="sticky top-20 hidden lg:col-span-4 lg:block">
-        WhoToFollow
+        <WhoToFollow />
       </div>
     </div>
   );
