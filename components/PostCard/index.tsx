@@ -63,7 +63,7 @@ const PostCard = ({
 
   useEffect(() => {
     setHasLiked(post.likes.some((like) => like.userId === user.id));
-    // @eslint-ignore-next-line
+    // eslint-disable-next-line
   }, [user]);
 
   return (
