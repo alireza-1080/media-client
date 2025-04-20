@@ -20,7 +20,7 @@ const FollowButton = ({ followingId }: { followingId: string }) => {
         throw new Error(res.error);
       }
 
-      return toast.success("Followed");
+      return toast.success("User followed successfully");
     } catch (error) {
       if (error instanceof Error) {
         return toast.error(error.message);
