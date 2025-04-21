@@ -19,6 +19,8 @@ import DeleteAlertDialog from "../DeleteAlertDialog";
 import { Textarea } from "../ui/textarea";
 import toggleLike from "@/actions/toggleLike";
 import toast from "react-hot-toast";
+import createComment from "@/actions/createComment";
+import deletePost from "@/actions/deletePost";
 
 const PostCard = ({
   post,
@@ -61,6 +63,42 @@ const PostCard = ({
     }
   };
 
+  const handleAddComment = async () => {
+    if (!newComment.trim() || isCommenting) return;
+
+    try {
+      setIsCommenting(true);
+      const res = await createComment(post.id, newComment, user.id);
+
+      if (!res.success) throw new Error("Error during posting the comment.");
+
+      toast.success(`Comment posted successfully.`);
+      setNewComment("");
+    } catch {
+      toast.error(`Error while posting the comment`);
+    } finally {
+      setIsCommenting(false);
+    }
+  };
+
+  const handleDeletePost = async () => {
+    if (isDeleting) return;
+
+    try {
+      setIsDeleting(true);
+      const res = await deletePost(post.id, user.id);
+
+      if (!res.success) throw new Error("❌");
+
+      toast.success("Post removed successfully.");
+      return;
+    } catch {
+      toast.error(`Failed to delete the post.`);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   useEffect(() => {
     setHasLiked(post.likes.some((like) => like.userId === user.id));
     // eslint-disable-next-line
@@ -97,12 +135,12 @@ const PostCard = ({
                   </div>
                 </div>
                 {/* Check if current user is the post author */}
-                {/* {userId === post.author.id && (
+                {user.id === post.author.id && (
                   <DeleteAlertDialog
                     isDeleting={isDeleting}
                     onDelete={handleDeletePost}
                   />
-                )} */}
+                )}
               </div>
               <p className="text-foreground mt-2 text-sm break-words">
                 {post.content}
@@ -117,6 +155,7 @@ const PostCard = ({
                 alt="Post content"
                 width={100}
                 height={100}
+                priority
                 className="h-auto w-full object-cover"
               />
             </div>
@@ -211,7 +250,7 @@ const PostCard = ({
                     <div className="mt-2 flex justify-end">
                       <Button
                         size="sm"
-                        // onClick={handleAddComment}
+                        onClick={handleAddComment}
                         className="flex items-center gap-2"
                         disabled={!newComment.trim() || isCommenting}
                       >

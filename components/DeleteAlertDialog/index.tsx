@@ -20,7 +20,12 @@ type DeleteAlertDialogPropsType = {
   description?: string;
 };
 
-const DeleteAlertDialog = ({isDeleting, onDelete, title = "Delete Post", description= "This action cannot be undone."}: DeleteAlertDialogPropsType) => {
+const DeleteAlertDialog = ({
+  isDeleting,
+  onDelete,
+  title = "Delete Post",
+  description = "This action cannot be undone.",
+}: DeleteAlertDialogPropsType) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
