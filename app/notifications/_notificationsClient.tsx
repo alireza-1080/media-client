@@ -4,9 +4,43 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
+import { UserPlusIcon } from "lucide-react";
+import { HeartIcon, MessageCircleIcon } from "lucide-react";
 import Image from "next/image";
 
-const NotificationsClient = ({notifications}) => {
+interface Notification {
+  id: string;
+  userId: string;
+  creatorId: string;
+  type: "LIKE" | "COMMENT" | "FOLLOW";
+  read: boolean;
+  postId: string | null;
+  commentId: string | null;
+  createdAt: string;
+  creator: {
+    id: string;
+    username: string;
+    image: string;
+    name: string;
+  } | null;
+  post: { id: string; image: string; content: string } | null;
+  comment: { id: string; content: string; createdAt: string } | null;
+}
+
+const getNotificationIcon = (type: string) => {
+  switch (type) {
+    case "LIKE":
+      return <HeartIcon className="size-4 text-red-500" />;
+    case "COMMENT":
+      return <MessageCircleIcon className="size-4 text-blue-500" />;
+    case "FOLLOW":
+      return <UserPlusIcon className="size-4 text-green-500" />;
+    default:
+      return null;
+  }
+};
+
+const NotificationsClient = ({notifications}: {notifications: Notification[]}) => {
   return (
     <div className="space-y-4">
       <Card>
@@ -34,7 +68,7 @@ const NotificationsClient = ({notifications}) => {
                 >
                   <Avatar className="mt-1">
                     <AvatarImage
-                      src={notification.creator.image ?? "/avatar.png"}
+                      src={notification?.creator?.image}
                     />
                   </Avatar>
                   <div className="flex-1 space-y-1">
@@ -42,8 +76,8 @@ const NotificationsClient = ({notifications}) => {
                       {getNotificationIcon(notification.type)}
                       <span>
                         <span className="font-medium">
-                          {notification.creator.name ??
-                            notification.creator.username}
+                          {notification?.creator?.name ??
+                            notification?.creator?.username}
                         </span>{" "}
                         {notification.type === "FOLLOW"
                           ? "started following you"
