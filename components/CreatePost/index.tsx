@@ -15,37 +15,38 @@ const CreatePost = () => {
   const [content, setContent] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("https://testImage.png");
   const [isPosting, setIsPosting] = useState<boolean>(false);
+  // eslint-disable-next-line
   const [showImageUpload, SetShowImageUpload] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     if (!content.trim()) {
       toast.error("Post content is not provided");
-      return
+      return;
     }
 
     if (!imageUrl) {
-      toast.error("Post image is not provided")
-      return
+      toast.error("Post image is not provided");
+      return;
     }
 
-    setIsPosting(true)
+    setIsPosting(true);
 
     try {
-      const res = await createPost(id, content, imageUrl)
+      const res = await createPost(id, content, imageUrl);
 
       if (res.success) {
-        toast.success("Post created successfully")
-        setContent("")
-        setIsPosting(false)
-        setImageUrl("")
-        return
+        toast.success("Post created successfully");
+        setContent("");
+        setIsPosting(false);
+        setImageUrl("");
+        return;
       }
 
-      return toast.error("Something went wrong")
+      return toast.error("Something went wrong");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setIsPosting(false)
+      setIsPosting(false);
     }
   };
 

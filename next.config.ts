@@ -1,10 +1,19 @@
-import type { NextConfig } from "next";
+import { type NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   /* config options here */
   images: {
-    domains: ['nordicapis.com', 'codewithmosh.com'],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "nordicapis.com",
+      },
+      {
+        protocol: "https",
+        hostname: "codewithmosh.com",
+      },
+    ],
   },
-};
+} satisfies NextConfig;
 
 export default nextConfig;

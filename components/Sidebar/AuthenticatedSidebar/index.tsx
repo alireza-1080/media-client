@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { LinkIcon, MapPinIcon } from "lucide-react";
@@ -11,8 +11,7 @@ import { useAppSelector } from "@/redux/hooks";
 configDotenv();
 
 const AuthenticatedSidebar = () => {
-  
-  const user = useAppSelector(state => state.user.value)
+  const user = useAppSelector((state) => state.user.value);
 
   return (
     <div className="sticky top-20">

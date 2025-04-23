@@ -22,7 +22,7 @@ const followUser = async (followerId: string, followingId: string) => {
       return { success: false, error: data.error };
     }
 
-    revalidatePath("/")
+    revalidatePath("/");
     return { success: true, message: "Follow created successfully" };
   } catch (error) {
     console.error("Unexpected error in followUser:", error);

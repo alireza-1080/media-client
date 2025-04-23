@@ -17,13 +17,12 @@ const deletePost = async (postId: string, userId: string) => {
 
     if (!res.ok) throw new Error("❌");
 
-    const data = await res.json()
-    console.log(data)
+    await res.json();
 
-    revalidatePath("/")
-    return {success: true, message: `Post deleted successfully`}
+    revalidatePath("/");
+    return { success: true, message: `Post deleted successfully` };
   } catch {
-    return {success: false, error: `Failed to delete the post`}
+    return { success: false, error: `Failed to delete the post` };
   }
 };
 
