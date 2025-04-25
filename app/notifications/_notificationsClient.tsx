@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import readNotification from "@/actions/readNotification";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -40,7 +42,42 @@ const getNotificationIcon = (type: string) => {
   }
 };
 
-const NotificationsClient = ({notifications}: {notifications: Notification[]}) => {
+const NotificationsClient = ({
+  notifications,
+}: {
+  notifications: Notification[];
+}) => {
+  const notificationsIds = notifications.map((notification) => notification.id);
+  const [formattedTimes, setFormattedTimes] = useState<{
+    [key: string]: string;
+  }>({});
+
+  useEffect(() => {
+    if (notificationsIds.length > 0) {
+      readNotification(notificationsIds);
+    }
+  }, [notificationsIds]);
+
+  useEffect(() => {
+    const formatTimes = () => {
+      const times: { [key: string]: string } = {};
+      notifications.forEach((notification) => {
+        times[notification.id] = formatDistanceToNow(
+          new Date(notification.createdAt),
+          {
+            addSuffix: true,
+          },
+        );
+      });
+      setFormattedTimes(times);
+    };
+
+    formatTimes();
+    // Update times every minute
+    const interval = setInterval(formatTimes, 60000);
+    return () => clearInterval(interval);
+  }, [notifications]);
+
   return (
     <div className="space-y-4">
       <Card>
@@ -67,9 +104,9 @@ const NotificationsClient = ({notifications}: {notifications: Notification[]}) =
                   }`}
                 >
                   <Avatar className="mt-1">
-                    <AvatarImage
-                      src={notification?.creator?.image}
-                    />
+                    {notification?.creator?.image && (
+                      <AvatarImage src={notification.creator.image} />
+                    )}
                   </Avatar>
                   <div className="flex-1 space-y-1">
                     <div className="flex items-center gap-2">
@@ -86,7 +123,6 @@ const NotificationsClient = ({notifications}: {notifications: Notification[]}) =
                             : "commented on your post"}
                       </span>
                     </div>
-
                     {notification.post &&
                       (notification.type === "LIKE" ||
                         notification.type === "COMMENT") && (
@@ -97,8 +133,12 @@ const NotificationsClient = ({notifications}: {notifications: Notification[]}) =
                               <Image
                                 src={notification.post.image}
                                 alt="Post content"
-                                fill
+                                width={0}
+                                height={0}
+                                sizes="200px"
+                                priority
                                 className="mt-2 h-auto w-full max-w-[200px] rounded-md object-cover"
+                                style={{ width: "100%", height: "auto" }}
                               />
                             )}
                           </div>
@@ -113,9 +153,7 @@ const NotificationsClient = ({notifications}: {notifications: Notification[]}) =
                       )}
 
                     <p className="text-muted-foreground pl-6 text-sm">
-                      {formatDistanceToNow(new Date(notification.createdAt), {
-                        addSuffix: true,
-                      })}
+                      {formattedTimes[notification.id] || ""}
                     </p>
                   </div>
                 </div>

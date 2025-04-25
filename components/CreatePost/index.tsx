@@ -13,7 +13,7 @@ const CreatePost = () => {
   const user = useAppSelector((state) => state.user.value);
   const { id } = user;
   const [content, setContent] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string>("https://testImage.png");
+  const [imageUrl, setImageUrl] = useState<string>("https://www.usatoday.com/gcdn/authoring/authoring-images/2025/04/24/USAT/83255649007-messi-424.jpg?crop=3332,1874,x0,y0&width=660&height=371&format=pjpg&auto=webp");
   const [isPosting, setIsPosting] = useState<boolean>(false);
   // eslint-disable-next-line
   const [showImageUpload, SetShowImageUpload] = useState<boolean>(false);

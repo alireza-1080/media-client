@@ -6,11 +6,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "nordicapis.com",
-      },
-      {
-        protocol: "https",
-        hostname: "codewithmosh.com",
+        hostname: "www.usatoday.com",
       },
     ],
   },

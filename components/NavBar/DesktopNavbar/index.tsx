@@ -26,7 +26,7 @@ const DesktopNavbar = async () => {
         <>
           <SyncUserAction />
           <Button variant={"ghost"} className="flex items-center gap-2" asChild>
-            <Link href={"/"}>
+            <Link href={"/notifications"}>
               <BellIcon className="size-4" />
               <span className="hidden lg:inline">Notification</span>
             </Link>
