@@ -33,7 +33,7 @@ const WhoToFollow = async () => {
   });
 
   const data = await res.json();
-  const users: UserLocalType[] = data.users;
+  const users: UserLocalType[] = data.users || [];
 
   return (
     <Card>

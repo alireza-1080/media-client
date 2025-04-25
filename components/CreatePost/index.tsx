@@ -43,8 +43,8 @@ const CreatePost = () => {
       }
 
       return toast.error("Something went wrong");
-    } catch (error) {
-      console.log(error);
+    } catch {
+      toast.error("Something went wrong");
     } finally {
       setIsPosting(false);
     }

@@ -1,18 +1,131 @@
+"use client";
 import PostCard from "@/components/PostCard";
 import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { SignInButton } from "@clerk/nextjs";
-import { CalendarIcon, EditIcon, FileTextIcon, HeartIcon, LinkIcon, MapPinIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  EditIcon,
+  FileTextIcon,
+  HeartIcon,
+  LinkIcon,
+  MapPinIcon,
+} from "lucide-react";
+import { User } from "@/actions/getProfileByUsername";
+import { useAppSelector } from "@/redux/hooks";
+import { useState } from "react";
+import followUser from "@/actions/followUser.action";
+import toast from "react-hot-toast";
+import unfollowUser from "@/actions/unfollowUser";
+import { format } from "date-fns";
+import { updateUser } from "@/actions/updateUser";
+import { useRouter } from "next/navigation";
+import { PostType } from "@/types/post.type";
 
-const ProfilePageClient = () => {
+interface ProfilePageClientProps {
+  user: User;
+  posts: PostType[];
+  likedPosts: PostType[];
+  isFollowing: boolean;
+}
+
+const ProfilePageClient = ({
+  user,
+  posts,
+  likedPosts,
+  isFollowing: initialIsFollowing,
+}: ProfilePageClientProps) => {
+  const router = useRouter();
+  const formattedDate = format(new Date(user.createdAt), "MMMM yyyy");
+  const currentUser = useAppSelector((state) => state.user.value);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
+  const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
+  const [name, setName] = useState(user.name || "");
+  const [bio, setBio] = useState(user.bio || "");
+  const [location, setLocation] = useState(user.location || "");
+  const [website, setWebsite] = useState(user.website || "");
+
+  const isOwnProfile = currentUser?.username === user.username;
+
+  const handleFollow = async () => {
+    if (!currentUser) return;
+    if (isUpdatingFollow) return;
+
+    try {
+      setIsUpdatingFollow(true);
+      const res = await followUser(currentUser.id, user.id);
+
+      if (res.success) {
+        setIsFollowing((prev) => !prev);
+      }
+    } catch {
+      toast.error("Failed to update follow status");
+    } finally {
+      setIsUpdatingFollow(false);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    if (!currentUser) return;
+    if (isUpdatingFollow) return;
+
+    try {
+      setIsUpdatingFollow(true);
+      const res = await unfollowUser(currentUser.id, user.id);
+
+      if (res.success) {
+        setIsFollowing((prev) => !prev);
+      }
+    } catch {
+      toast.error("Failed to update follow status");
+    } finally {
+      setIsUpdatingFollow(false);
+    }
+  };
+
+  const handleEditSubmit = async () => {
+    if (!currentUser) return;
+
+    try {
+      const res = await updateUser(
+        currentUser.id,
+        name,
+        bio,
+        location,
+        website,
+      );
+
+      if (!res.success) {
+        throw new Error("Failed to update profile");
+      }
+
+      toast.success("Profile updated successfully");
+      setShowEditDialog(false);
+      setName(user.name || "");
+      setBio(user.bio || "");
+      setLocation(user.location || "");
+      setWebsite(user.website || "");
+
+      router.refresh();
+    } catch {
+      toast.error("Failed to update profile");
+    }
+  };
+
   return (
     <div className="mx-auto max-w-3xl">
       <div className="grid grid-cols-1 gap-6">
@@ -21,11 +134,9 @@ const ProfilePageClient = () => {
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src={user.image ?? "/avatar.png"} />
+                  <AvatarImage src={user.image} />
                 </Avatar>
-                <h1 className="mt-4 text-2xl font-bold">
-                  {user.name ?? user.username}
-                </h1>
+                <h1 className="mt-4 text-2xl font-bold">{user.username}</h1>
                 <p className="text-muted-foreground">@{user.username}</p>
                 <p className="mt-2 text-sm">{user.bio}</p>
 
@@ -34,7 +145,7 @@ const ProfilePageClient = () => {
                   <div className="mb-4 flex justify-between">
                     <div>
                       <div className="font-semibold">
-                        {user._count.following.toLocaleString()}
+                        {user._count.followings}
                       </div>
                       <div className="text-muted-foreground text-sm">
                         Following
@@ -75,7 +186,7 @@ const ProfilePageClient = () => {
                 ) : (
                   <Button
                     className="mt-4 w-full"
-                    onClick={handleFollow}
+                    onClick={isFollowing ? handleUnfollow : handleFollow}
                     disabled={isUpdatingFollow}
                     variant={isFollowing ? "outline" : "default"}
                   >
@@ -140,7 +251,7 @@ const ProfilePageClient = () => {
             <div className="space-y-6">
               {posts.length > 0 ? (
                 posts.map((post) => (
-                  <PostCard key={post.id} post={post} dbUserId={user.id} />
+                  <PostCard key={post.id} post={post} userId={user.id} />
                 ))
               ) : (
                 <div className="text-muted-foreground py-8 text-center">
@@ -154,7 +265,7 @@ const ProfilePageClient = () => {
             <div className="space-y-6">
               {likedPosts.length > 0 ? (
                 likedPosts.map((post) => (
-                  <PostCard key={post.id} post={post} dbUserId={user.id} />
+                  <PostCard key={post.id} post={post} userId={user.id} />
                 ))
               ) : (
                 <div className="text-muted-foreground py-8 text-center">
@@ -169,15 +280,15 @@ const ProfilePageClient = () => {
           <DialogContent className="sm:max-w-[500px]">
             <AlertDialogHeader>
               <DialogTitle>Edit Profile</DialogTitle>
-            </ AlertDialogHeader>
+            </AlertDialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label>Name</Label>
                 <Input
                   name="name"
-                  value={editForm.name}
+                  value={name}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, name: e.target.value })
+                    setName(e.target.value)
                   }
                   placeholder="Your name"
                 />
@@ -186,9 +297,9 @@ const ProfilePageClient = () => {
                 <Label>Bio</Label>
                 <Textarea
                   name="bio"
-                  value={editForm.bio}
+                  value={bio}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, bio: e.target.value })
+                    setBio(e.target.value)
                   }
                   className="min-h-[100px]"
                   placeholder="Tell us about yourself"
@@ -198,9 +309,9 @@ const ProfilePageClient = () => {
                 <Label>Location</Label>
                 <Input
                   name="location"
-                  value={editForm.location}
+                  value={location}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, location: e.target.value })
+                    setLocation(e.target.value)
                   }
                   placeholder="Where are you based?"
                 />
@@ -209,9 +320,9 @@ const ProfilePageClient = () => {
                 <Label>Website</Label>
                 <Input
                   name="website"
-                  value={editForm.website}
+                  value={website}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, website: e.target.value })
+                    setWebsite(e.target.value)
                   }
                   placeholder="Your personal website"
                 />

@@ -6,39 +6,34 @@ configDotenv();
 const serverUrl = process.env.SERVER_URL;
 
 interface GetUserPostsByUsernameResponse {
-  id: string;
-  authorId: string;
-  content: string;
-  image: string;
-  createdAt: string;
-  updatedAt: string;
-  author: {
-    id: string;
-    username: string;
-    name: string;
-    image: string;
-  };
-  comments: {
-    authorId: string;
-    content: string;
-    createdAt: string;
-    id: string;
-    postId: string;
-    author: {
+    posts: Array<{
       id: string;
+      content: string;
       image: string;
-      name: string;
-      username: string;
-    };
-  }[];
-  likes: {
-    userId: string;
-  }[];
-  _count: {
-    likes: number;
-    comments: number;
-  };
-}
+      createdAt: Date;
+      author: {
+        id: string;
+        name: string;
+        image: string;
+        username: string;
+      };
+      comments: Array<{
+        author: {
+          id: string;
+          username: string;
+          name: string;
+          image: string;
+        };
+      }>;
+      likes: Array<{
+        userId: string;
+      }>;
+      _count: {
+        likes: number;
+        comments: number;
+      };
+    }>
+  }
 
 const getUserPostsByUsername = async (username: string) => {
   try {
@@ -56,9 +51,9 @@ const getUserPostsByUsername = async (username: string) => {
     
     return { success: true, posts };
   } catch (error) {
-    console.log(error);
     return { success: false, error: (error as Error).message };
   }
 };
 
+export type { GetUserPostsByUsernameResponse };
 export default getUserPostsByUsername;

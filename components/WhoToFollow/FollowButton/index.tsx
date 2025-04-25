@@ -25,8 +25,6 @@ const FollowButton = ({ followingId }: { followingId: string }) => {
       if (error instanceof Error) {
         return toast.error(error.message);
       }
-
-      console.log(error);
       return toast.error("Unexpected Error");
     } finally {
       setIsLoading(false);

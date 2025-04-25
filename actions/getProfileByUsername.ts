@@ -30,11 +30,15 @@ const getProfileByUsername = async (username: string) => {
 
     const user: User = data.user;
 
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+
     return { success: true, user };
-  } catch (error) {
-    console.log(error);
+  } catch {
     return { success: false, error: "Failed to fetch user" };
   }
 };
 
+export type { User };
 export default getProfileByUsername;
