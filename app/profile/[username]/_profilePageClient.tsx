@@ -54,7 +54,7 @@ const ProfilePageClient = ({
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
-  const [name, setName] = useState(user.name || "");
+  const [name] = useState(user.name);
   const [bio, setBio] = useState(user.bio || "");
   const [location, setLocation] = useState(user.location || "");
   const [website, setWebsite] = useState(user.website || "");
@@ -115,7 +115,6 @@ const ProfilePageClient = ({
 
       toast.success("Profile updated successfully");
       setShowEditDialog(false);
-      setName(user.name || "");
       setBio(user.bio || "");
       setLocation(user.location || "");
       setWebsite(user.website || "");
@@ -287,10 +286,8 @@ const ProfilePageClient = ({
                 <Input
                   name="name"
                   value={name}
-                  onChange={(e) =>
-                    setName(e.target.value)
-                  }
                   placeholder="Your name"
+                  disabled
                 />
               </div>
               <div className="space-y-2">
@@ -298,9 +295,7 @@ const ProfilePageClient = ({
                 <Textarea
                   name="bio"
                   value={bio}
-                  onChange={(e) =>
-                    setBio(e.target.value)
-                  }
+                  onChange={(e) => setBio(e.target.value)}
                   className="min-h-[100px]"
                   placeholder="Tell us about yourself"
                 />
@@ -310,9 +305,7 @@ const ProfilePageClient = ({
                 <Input
                   name="location"
                   value={location}
-                  onChange={(e) =>
-                    setLocation(e.target.value)
-                  }
+                  onChange={(e) => setLocation(e.target.value)}
                   placeholder="Where are you based?"
                 />
               </div>
@@ -321,9 +314,7 @@ const ProfilePageClient = ({
                 <Input
                   name="website"
                   value={website}
-                  onChange={(e) =>
-                    setWebsite(e.target.value)
-                  }
+                  onChange={(e) => setWebsite(e.target.value)}
                   placeholder="Your personal website"
                 />
               </div>
