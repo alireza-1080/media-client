@@ -8,9 +8,7 @@ configDotenv();
 const serverUrl = process.env.SERVER_URL;
 
 const unfollowUser = async (followerId: string, followingId: string) => {
-  console.log("followerId", followerId);
-  console.log("followingId", followingId);
-  console.log("serverUrl", serverUrl);
+
   try {
     const res = await fetch(`${serverUrl}/user/unfollow-user`, {
       method: "POST",

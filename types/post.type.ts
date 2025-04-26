@@ -17,6 +17,7 @@ type PostType = {
   authorId: string;
   content: string;
   image: string;
+  fileKey: string;
   createdAt: string;
   updatedAt: string;
   author: {
@@ -27,7 +28,7 @@ type PostType = {
   };
   comments: CommentType[];
   likes: { userId: string }[];
-  _count: { likes: 0; comments: 0 };
+  _count: { likes: number; comments: number };
 };
 
 export type { PostType };

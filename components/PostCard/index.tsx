@@ -21,6 +21,7 @@ import toggleLike from "@/actions/toggleLike";
 import toast from "react-hot-toast";
 import createComment from "@/actions/createComment";
 import deletePost from "@/actions/deletePost";
+import { deleteImage } from "@/actions/deleteImage.action";
 
 const PostCard = ({
   post,
@@ -86,14 +87,24 @@ const PostCard = ({
 
     try {
       setIsDeleting(true);
+
+      // First delete the post from database
       const res = await deletePost(post.id, user.id);
 
-      if (!res.success) throw new Error("❌");
+      if (!res.success) {
+        throw new Error("Failed to delete post");
+      }
+
+      // If post had an image and was deleted successfully, delete from UploadThing
+      if (res.deletedPostFileKey) {
+        await deleteImage(res.deletedPostFileKey);
+      }
 
       toast.success("Post removed successfully.");
       return;
-    } catch {
+    } catch (error) {
       toast.error(`Failed to delete the post.`);
+      console.error(error);
     } finally {
       setIsDeleting(false);
     }
@@ -153,9 +164,10 @@ const PostCard = ({
               <Image
                 src={post.image}
                 alt="Post content"
-                width={100}
-                height={100}
+                width={1000}
+                height={1000}
                 priority
+                quality={100}
                 className="h-auto w-full object-cover"
               />
             </div>

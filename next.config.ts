@@ -6,7 +6,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "www.usatoday.com",
+        hostname: "uploadthing.com",
+      },
+      {
+        protocol: "https",
+        hostname: "utfs.io",
       },
     ],
   },

@@ -8,15 +8,16 @@ import { Button } from "../ui/button";
 import { ImageIcon, Loader2Icon, SendIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import createPost from "@/actions/createPost.action";
+import ImageUpload from "../ImageUpload";
 
 const CreatePost = () => {
   const user = useAppSelector((state) => state.user.value);
   const { id } = user;
   const [content, setContent] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string>("https://www.usatoday.com/gcdn/authoring/authoring-images/2025/04/24/USAT/83255649007-messi-424.jpg?crop=3332,1874,x0,y0&width=660&height=371&format=pjpg&auto=webp");
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [fileKey, setFileKey] = useState<string>("");
   const [isPosting, setIsPosting] = useState<boolean>(false);
-  // eslint-disable-next-line
-  const [showImageUpload, SetShowImageUpload] = useState<boolean>(false);
+  const [showImageUpload, setShowImageUpload] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     if (!content.trim()) {
@@ -32,13 +33,15 @@ const CreatePost = () => {
     setIsPosting(true);
 
     try {
-      const res = await createPost(id, content, imageUrl);
+      const res = await createPost(id, content, imageUrl, fileKey);
 
       if (res.success) {
         toast.success("Post created successfully");
         setContent("");
         setIsPosting(false);
         setImageUrl("");
+        setFileKey("");
+        setShowImageUpload(false);
         return;
       }
 
@@ -67,18 +70,19 @@ const CreatePost = () => {
             />
           </div>
 
-          {/* {(showImageUpload || imageUrl) && (
-            <div className="border rounded-lg p-4">
+          {(showImageUpload || imageUrl) && (
+            <div className="rounded-lg border p-4">
               <ImageUpload
                 endpoint="postImage"
                 value={imageUrl}
-                onChange={(url: string) => {
-                  setImageUrl(url);
+                onChange={(url, key) => {
+                  setImageUrl(url || "");
+                  setFileKey(key || "");
                   if (!url) setShowImageUpload(false);
                 }}
               />
             </div>
-          )} */}
+          )}
 
           <div className="flex items-center justify-between border-t pt-4">
             <div className="flex space-x-2">
@@ -87,6 +91,8 @@ const CreatePost = () => {
                 variant="ghost"
                 size="sm"
                 className="text-muted-foreground hover:text-primary"
+                onClick={() => setShowImageUpload(!showImageUpload)}
+                disabled={isPosting}
               >
                 <ImageIcon className="mr-2 size-4" />
                 Photo

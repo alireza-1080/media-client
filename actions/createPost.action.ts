@@ -5,14 +5,19 @@ import { revalidatePath } from "next/cache";
 configDotenv();
 const serverUrl = process.env.SERVER_URL;
 
-const createPost = async (authorId: string, content: string, image: string) => {
+const createPost = async (
+  authorId: string,
+  content: string,
+  image: string,
+  fileKey: string,
+) => {
   try {
     const res = await fetch(`${serverUrl}/post/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ authorId, content, image }),
+      body: JSON.stringify({ authorId, content, image, fileKey }),
     });
 
     if (res.ok) {
