@@ -17,7 +17,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting file:", error);
     return NextResponse.json(
       { error: "Failed to delete file" },
       { status: 500 },
