@@ -46,6 +46,11 @@ const PostCard = ({
       return;
     }
 
+    if (!userId) {
+      toast.error("Please sign in to like posts");
+      return;
+    }
+
     try {
       setIsLiking(true);
       setHasLiked((prev) => !prev);
