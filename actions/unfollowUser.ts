@@ -8,28 +8,27 @@ configDotenv();
 const serverUrl = process.env.SERVER_URL;
 
 const unfollowUser = async (followerId: string, followingId: string) => {
-
   try {
     const res = await fetch(`${serverUrl}/user/unfollow-user`, {
       method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ followerId, followingId }),
-        });
-    
-        const data = await res.json();
-    
-        if (!res.ok) {
-          return { success: false, error: data.error };
-        }
-    
-        revalidatePath("/");
-        return { success: true, message: "Follow deleted successfully" };
-      } catch (error) {
-        console.error("Unexpected error in followUser:", error);
-        return { success: false, error: "An unexpected error occurred" };
-      }
-}
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ followerId, followingId }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return { success: false, error: data.error };
+    }
+
+    revalidatePath("/");
+    return { success: true, message: "Follow deleted successfully" };
+  } catch (error) {
+    console.error("Unexpected error in followUser:", error);
+    return { success: false, error: "An unexpected error occurred" };
+  }
+};
 
 export default unfollowUser;

@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import { PostType } from "@/types/post.type";
 
 interface UserProfilePageProps {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }
 
 const UserProfilePage = async ({ params }: UserProfilePageProps) => {
