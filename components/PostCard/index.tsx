@@ -70,6 +70,11 @@ const PostCard = ({
   };
 
   const handleAddComment = async () => {
+    if (!userId) {
+      toast.error("Please sign in to comment");
+      return;
+    }
+
     if (!newComment.trim() || isCommenting) return;
 
     try {
