@@ -40,6 +40,7 @@ interface ProfilePageClientProps {
   posts: PostType[];
   likedPosts: PostType[];
   isFollowing: boolean;
+  visitorId: string | undefined;
 }
 
 const ProfilePageClient = ({
@@ -47,6 +48,7 @@ const ProfilePageClient = ({
   posts,
   likedPosts,
   isFollowing: initialIsFollowing,
+  visitorId,
 }: ProfilePageClientProps) => {
   const router = useRouter();
   const formattedDate = format(new Date(user.createdAt), "MMMM yyyy");
@@ -250,7 +252,7 @@ const ProfilePageClient = ({
             <div className="space-y-6">
               {posts.length > 0 ? (
                 posts.map((post) => (
-                  <PostCard key={post.id} post={post} userId={user.id} />
+                  <PostCard key={post.id} post={post} userId={visitorId} />
                 ))
               ) : (
                 <div className="text-muted-foreground py-8 text-center">
@@ -264,7 +266,7 @@ const ProfilePageClient = ({
             <div className="space-y-6">
               {likedPosts.length > 0 ? (
                 likedPosts.map((post) => (
-                  <PostCard key={post.id} post={post} userId={user.id} />
+                  <PostCard key={post.id} post={post} userId={visitorId} />
                 ))
               ) : (
                 <div className="text-muted-foreground py-8 text-center">

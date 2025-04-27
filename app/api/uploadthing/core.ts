@@ -35,24 +35,10 @@ export const ourFileRouter = {
       return { userId };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      try {
-        // This code RUNS ON YOUR SERVER after upload
-        console.log("Upload complete for userId:", metadata.userId);
-        console.log("file url", file.ufsUrl);
-
-        // Here you could add the file to your database
-        // If database operation fails, we should delete the uploaded file
-
-        // Return both URL and key to the client for future deletion
-        return {
-          url: file.ufsUrl,
-          key: file.key, // Include the file key for deletion
-        };
-      } catch (error) {
-        // If anything goes wrong, delete the uploaded file
-        await utapi.deleteFiles([file.key]);
-        throw error;
-      }
+      // This code RUNS ON YOUR SERVER after upload
+      // !!! Whatever is logged here will be logged on your server
+      // !!! NOT in the browser console
+      return { uploadedBy: metadata.userId };
     }),
 } satisfies FileRouter;
 

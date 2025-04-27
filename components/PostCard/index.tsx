@@ -24,14 +24,13 @@ import deletePost from "@/actions/deletePost";
 import { deleteImage } from "@/actions/deleteImage.action";
 import { useRouter } from "next/navigation";
 
-
-const PostCard = ({
+export default function PostCard({
   post,
   userId,
 }: {
   post: PostType;
   userId: string | undefined;
-}) => {
+}) {
   const router = useRouter();
   const user = useAppSelector((state) => state.user.value);
   const [newComment, setNewComment] = useState<string>("");
@@ -56,22 +55,26 @@ const PostCard = ({
 
     try {
       setIsLiking(true);
-      setHasLiked((prev) => !prev);
-      setOptimisticLikesCount((prev) => prev + (hasLiked ? -1 : +1));
+      // Optimistic update
+      const newHasLiked = !hasLiked;
+      setHasLiked(newHasLiked);
+      setOptimisticLikesCount((prev) => prev + (newHasLiked ? 1 : -1));
+
       const res = await toggleLike(post.id, userId);
 
-      if (res.success) {
-        return;
+      if (!res.success) {
+        // Revert optimistic update if the request failed
+        setHasLiked(!newHasLiked);
+        setOptimisticLikesCount((prev) => prev + (newHasLiked ? -1 : 1));
+        throw new Error(res.error as string);
       }
-
-      toast.error(res.error as string);
-    } catch {
-      toast.error("Failed to like the post");
+    } catch (error) {
+      toast.error(
+        typeof error === "string" ? error : "Failed to like the post",
+      );
     } finally {
       setIsLiking(false);
     }
-
-    router.refresh();
   };
 
   const handleAddComment = async () => {
@@ -119,9 +122,8 @@ const PostCard = ({
 
       toast.success("Post removed successfully.");
       return;
-    } catch (error) {
+    } catch {
       toast.error(`Failed to delete the post.`);
-      console.error(error);
     } finally {
       setIsDeleting(false);
     }
@@ -219,7 +221,6 @@ const PostCard = ({
                   className="text-muted-foreground gap-2"
                 >
                   <HeartIcon className="size-5" />
-                  {/* <span>{optimisticLikes}</span> */}
                 </Button>
               </SignInButton>
             )}
@@ -313,6 +314,4 @@ const PostCard = ({
       </CardContent>
     </Card>
   );
-};
-
-export default PostCard;
+}

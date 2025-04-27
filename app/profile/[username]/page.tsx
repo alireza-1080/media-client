@@ -51,6 +51,7 @@ const UserProfilePage = async ({ params }: UserProfilePageProps) => {
       posts={posts}
       likedPosts={likedPosts}
       isFollowing={isFollowing}
+      visitorId={visitorClerkId}
     />
   );
 };
