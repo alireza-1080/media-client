@@ -41,12 +41,8 @@ const ImageUpload = ({ endpoint, value, onChange }: ImageUploadProps) => {
       onClientUploadComplete={(res) => {
         onChange(res?.[0]?.url, res?.[0]?.key);
       }}
-      onUploadError={(error: Error) => {
-        try {
-          toast.error("Failed to upload image");
-        } catch (error) {
-          console.log(error);
-        }
+      onUploadError={() => {
+        toast.error("Failed to upload image");
       }}
     />
   );

@@ -1,3 +1,5 @@
+"use server";
+
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { currentUser } from "@clerk/nextjs/server";
@@ -34,7 +36,7 @@ export const ourFileRouter = {
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ metadata }) => {
       // This code RUNS ON YOUR SERVER after upload
       // !!! Whatever is logged here will be logged on your server
       // !!! NOT in the browser console
