@@ -22,6 +22,8 @@ import toast from "react-hot-toast";
 import createComment from "@/actions/createComment";
 import deletePost from "@/actions/deletePost";
 import { deleteImage } from "@/actions/deleteImage.action";
+import { useRouter } from "next/navigation";
+
 
 const PostCard = ({
   post,
@@ -30,6 +32,7 @@ const PostCard = ({
   post: PostType;
   userId: string | undefined;
 }) => {
+  const router = useRouter();
   const user = useAppSelector((state) => state.user.value);
   const [newComment, setNewComment] = useState<string>("");
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
@@ -67,6 +70,8 @@ const PostCard = ({
     } finally {
       setIsLiking(false);
     }
+
+    router.refresh();
   };
 
   const handleAddComment = async () => {
@@ -90,6 +95,8 @@ const PostCard = ({
     } finally {
       setIsCommenting(false);
     }
+
+    router.refresh();
   };
 
   const handleDeletePost = async () => {
@@ -118,6 +125,8 @@ const PostCard = ({
     } finally {
       setIsDeleting(false);
     }
+
+    router.refresh();
   };
 
   useEffect(() => {
