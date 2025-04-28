@@ -234,14 +234,14 @@ const ProfilePageClient = ({
           <TabsList className="h-auto w-full justify-start rounded-none border-b bg-transparent p-0">
             <TabsTrigger
               value="posts"
-              className="data-[state=active]:border-primary flex items-center gap-2 rounded-none px-6 font-semibold data-[state=active]:border-b-2 data-[state=active]:bg-transparent"
+              className="data-[state=active]:border-primary flex cursor-pointer items-center gap-2 rounded-none px-6 font-semibold data-[state=active]:border-b-2 data-[state=active]:bg-transparent"
             >
               <FileTextIcon className="size-4" />
               Posts
             </TabsTrigger>
             <TabsTrigger
               value="likes"
-              className="data-[state=active]:border-primary flex items-center gap-2 rounded-none px-6 font-semibold data-[state=active]:border-b-2 data-[state=active]:bg-transparent"
+              className="data-[state=active]:border-primary flex cursor-pointer items-center gap-2 rounded-none px-6 font-semibold data-[state=active]:border-b-2 data-[state=active]:bg-transparent"
             >
               <HeartIcon className="size-4" />
               Likes
