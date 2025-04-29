@@ -20,7 +20,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Media",
-  description: "Media is a social media platform for sharing images and videos.",
+  description:
+    "Media is a social media platform for sharing images and videos.",
   creator: "Alireza Aberoumand",
   authors: [
     {
@@ -49,7 +50,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Toaster />
-              <div className="min-h-screen">
+              <div className="container mx-auto min-h-screen">
                 <NavBar />
                 <main className="py-8">
                   <div className="mx-auto max-w-7xl px-4">
