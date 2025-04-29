@@ -8,6 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { SignInButton, SignOutButton, useAuth } from "@clerk/nextjs";
 import {
   BellIcon,
@@ -21,6 +22,7 @@ import React, { useState } from "react";
 
 const MobileNavbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
+  const { username } = useAppSelector((state) => state.user.value);
   const { isSignedIn } = useAuth();
 
   return (
@@ -66,7 +68,7 @@ const MobileNavbar = () => {
                   className="flex items-center justify-start gap-3"
                   asChild
                 >
-                  <Link href="/profile">
+                  <Link href={`/profile/${username}`}>
                     <UserIcon className="h-4 w-4" />
                     Profile
                   </Link>
